@@ -1,5 +1,9 @@
 'use strict'
 
+/*
+* js数据类型及语言基础
+*/
+
 // 判断arr是否为一个数组，返回一个bool值
 function isArray(src) {
 	return (src instanceof Array);
@@ -105,6 +109,42 @@ function isMobilePhone(phone) {
     return reg.test(phone);
 }
 
+/*
+* dom操作
+*/
+// 判断一个元素对象是否有某个class
+function hasClass(ele, cls) {
+	return ele.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+}
+
+// 为element增加一个样式名为newClassName的新样式
+function addClass(ele, cls) {
+    if (!hasClass(ele, cls)) {
+    	ele.className = ele.className + ' ' + cls;
+    };
+}
+
+// 移除element中的样式oldClassName
+function removeClass(ele, cls) {
+    if(hasClass(ele, cls)) {
+    	var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+    	ele.className = ele.className.replace(reg, ' ');
+    }
+}
+
+// 判断siblingNode和element是否为同一个父元素下的同一级的元素，返回bool值
+function isSiblingNode(ele1, ele2) {
+    return ele1.parentNode === ele2.parentNode;
+}
+
+// 获取element相对于浏览器窗口的位置，返回一个对象{x, y}
+function getPosition(element) {
+    return {
+    	x: element.offsetLeft,
+    	y: element.offsetTop
+    }
+}
+
 (function testUtil(){
 	console.log('=========test isArray========');
 	console.log(isArray([1, 2]));
@@ -180,5 +220,26 @@ function isMobilePhone(phone) {
 	console.log('============test isMobilePhone===========');
 	console.log(isMobilePhone(tel1)); 
 	console.log(isMobilePhone(tel2)); 
+
+	var obj = document.getElementsByTagName('button')[0];
+	addClass(obj, 'btn-warning');
+	console.log('============test addClass===========');
+	console.log('new class is ' + obj.className);
+
+	removeClass(obj, 'btn-sm');
+	console.log('============test removeClass===========');
+	console.log('new class is ' + obj.className);
+
+	var p1 = document.getElementById('p1'),
+		p2 = document.getElementById('p2'),
+		p3 = document.getElementById('p3');
+	console.log('============test isSiblingNode===========');
+	console.log('p1 and p2 are sibling node : ' + isSiblingNode(p1, p2));
+	console.log('p1 and p3 are sibling node : ' + isSiblingNode(p1, p3));
+
+	var button = document.getElementsByTagName('button')[0];
+	var position = getPosition(button);
+	console.log('============test getPosition===========');
+	console.log('position is (' + position.x + ', ' + position.y + ')');
 
 })();
