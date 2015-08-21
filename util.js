@@ -190,6 +190,116 @@ function $(selector) {
 	return curr;
 }
 
+// 给一个element绑定一个针对event事件的响应，响应函数为listener
+function addEvent(element, event, listener) {
+    if(element.addEventListener) {
+    	element.addEventListener(event, listener, false);
+    }else {
+    	element.attachEvent('on' + event, listener);
+    }
+}
+
+// 移除element对象对于event事件发生时执行listener的响应
+function removeEvent(element, event, listener) {
+    if(element.removeEventListener) {
+    	element.removeEventListener(event, listener, false);
+    }else {
+    	element.detachEvent('on' + event, listener);
+    }
+}
+
+// 实现对click事件的绑定
+function addClickEvent(element, listener) {
+    addEvent(element, 'click', listener);
+}
+
+// 实现对于按Enter键时的事件绑定
+function addEnterEvent(element, listener) {
+
+    document.onkeydown = function(e) {
+    	//IE事件监听器内使用的是一个全局的Event对象
+    	//而w3c是将event对象作为参数传递给监听器
+    	var e = e || window.event;
+    	if(e.keyCode == 13) {
+    		addEvent(element, 'keydown', listener);
+    	}
+    }
+}
+
+// 简单的事件代理
+// function delegateEvent(element, tag, eventName, listener) {
+//     each(element.getElementsByTagName(tag), function(item){
+//     	addEvent(item, eventName, listener);
+//     })
+// }
+
+// $.on = addEvent;
+// $.un = removeEvent;
+// $.click = addClickEvent;
+// $.enter = addEnterEvent;
+// $.delegate = delegateEvent;
+
+$.on = function(selector, event, listener) {
+    addEvent($(selector), event, listener);
+}
+
+$.click = function(selector, listener) {
+    addClickEvent($(selector), listener);
+}
+
+$.un = function(selector, event, listener) {
+    removeEvent($(selector), event, listener);
+}
+
+$.enter = function(selector, event, listener) {
+    addEnterEvent($(selector), event, listener);
+}
+
+$.delegate = function(selector, tag, event, listener) {
+    each($(selector).getElementsByTagName(tag), function(item){
+    	addEvent(item, event, listener);
+    })
+}
+
+//===========================test==================================
+
+var listener = function(){
+	alert('you clicked lalala');
+};
+
+$.on('.lalala', "click", listener);
+
+setTimeout(function(){
+	$.un('.lalala', "click", listener);
+}, 2000);
+
+$.click('#p3', function(){
+	alert('you click p3');
+})
+
+$.enter('#number1', function(){
+	alert('you press enter');
+})
+
+function clickListener(event) {
+	alert(event);
+}
+
+function renderListener() {
+	$('#list').innerHTML = '<li>new item</li>';
+}
+
+// (function init(){
+// 	each($('#list').getElementsByTagName('li'), function(item) {
+// 		$.click(item, clickListener);
+// 	});
+// 	$.click($('#btn2'), renderListener);
+// })()
+
+$.delegate('#list', "li", "click", clickListener);
+$.click('#btn2', renderListener);
+
+/*
 (function testSelector(){
 	console.log('============test id selector =============');
 	console.log($('#parentNode'));
@@ -206,7 +316,7 @@ function $(selector) {
 	console.log($('#grandNode .lalala'));
 })();
 
-(function testUtil(){
+(function testBasic(){
 	console.log('=========test isArray========');
 	console.log(isArray([1, 2]));
 	console.log(isArray({a: 1}));
@@ -304,3 +414,4 @@ function $(selector) {
 	console.log('position is (' + position.x + ', ' + position.y + ')');
 
 })();
+*/
