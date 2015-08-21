@@ -290,8 +290,11 @@ function getCookie(cookieName) {
 	var cookie = document.cookie;
     if(cookie.length > 0) {
     	var start = cookie.indexOf(cookieName + '=');
-    	var end = cookie.indexOf(';') > -1 ? cookie.indexOf(';') : cookie.length;
-    	return unescape(cookie.substring(start, end));
+    	if(start != -1){
+    		start = start + cookieName.length + 1;
+    		var end = cookie.indexOf(';') > -1 ? cookie.indexOf(';') : cookie.length;
+    		return unescape(cookie.substring(start, end));
+    	}
     }
     return '';
 }
