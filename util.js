@@ -261,7 +261,112 @@ $.delegate = function(selector, tag, event, listener) {
     })
 }
 
-//===========================test==================================
+// 判断是否为IE浏览器，返回-1或者版本号
+function isIE() {
+	var ua = navigator.userAgent.toLowerCase();
+    return window.ActiveXObject ? ua.match(/msie ([\d.]+)/)[1] : -1;
+}
+
+// 判断浏览器类型及版本
+function getUserAgent() {
+	var ua = navigator.userAgent.toLowerCase();
+	var sys = {};
+	if(window.ActiveXObject) {
+		sys.ie = ua.match(/msie ([\d.]+)/)[1];
+	}else if(window.getBoxObjectFor) {
+		sys.firefox = ua.match(/firefox\/([\d.]+)/)[1];
+	}else if(window.MessageEvent && !document.getBoxObjectFor) {
+		sys.chrome = ua.match(/chrome\/([\d.]+)/)[1];
+	}else if(window.opera) {
+		sys.opera = ua.match(/opera.([\d.]+)/)[1]
+	}else if(window.openDatabase) {
+		sys.safari = ua.match(/version\/([\d.]+)/)[1];
+	}
+	return sys;
+}
+
+// 获取cookie值
+function getCookie(cookieName) {
+	var cookie = document.cookie;
+    if(cookie.length > 0) {
+    	var start = cookie.indexOf(cookieName + '=');
+    	var end = cookie.indexOf(';') > -1 ? cookie.indexOf(';') : cookie.length;
+    	return unescape(cookie.substring(start, end));
+    }
+    return '';
+}
+
+// 设置cookie
+function setCookie(cookieName, cookieValue, expiredays) {
+    var exDate = new Date();
+    exDate.setDate(exDate.getDate() + expiredays);
+    document.cookie = cookieName + '=' + escape(cookieValue) + 
+    	((exDate === null) ? '' : ';expires=' + exDate.toGMTString());
+}
+
+// 封装的Ajax方法
+/*
+* options是一个对象，里面可以包括的参数为:
+*     type: post或者get，可以有一个默认值
+*     data: 发送的数据，为一个键值对象或者为一个用&连接的赋值字符串
+*     onsuccess: 成功时的调用函数
+*     onfail: 失败时的调用函数
+*/
+function ajax(url, options) {
+
+	function fn(){};
+    var xhr,
+    	data = options && options.data || '',
+    	success = options && options.onsuccess || fn,
+    	fail = options && options.onfail || fn,
+    	type = options && options.type.toUpperCase() || 'GET';
+    
+
+    xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP")
+
+    xhr.open(type, url);
+
+    if(type === 'POST') {
+    	xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;');
+    	xhr.send(data);
+    }else {  	
+    	url = url + (url.indexOf('?') === -1 ? '?' : '&') + data;
+    	xhr.send();
+    }
+
+    xhr.onreadystatechange = function(){
+    	if(xhr.readyState == 4 && xhr.status == 200) {
+    		return success(xhr.responseText);
+    	}else {
+    		return fail(xhr.status);
+    	}
+    }
+}
+
+//===========================test BOM==================================
+
+alert(isIE());
+
+var sys = getUserAgent();
+if(sys.ie) document.write('IE: '+sys.ie);
+if(sys.firefox) document.write('Firefox: '+sys.firefox);
+if(sys.chrome) document.write('Chrome: '+sys.chrome);
+if(sys.opera) document.write('Opera: '+sys.opera);
+if(sys.safari) document.write('Safari: '+sys.safari);
+
+(function checkCookie(){
+	var username = getCookie('username');
+	if(username) {
+		alert('welcome ' + username);
+	}else {
+		var username = prompt('please enter your name:');
+		if(username) {
+			setCookie('username', username, 365);
+		}
+	}
+})();
+
+//===========================test event================================
 
 var listener = function(){
 	alert('you clicked lalala');
@@ -299,7 +404,7 @@ function renderListener() {
 $.delegate('#list', "li", "click", clickListener);
 $.click('#btn2', renderListener);
 
-/*
+
 (function testSelector(){
 	console.log('============test id selector =============');
 	console.log($('#parentNode'));
@@ -414,4 +519,3 @@ $.click('#btn2', renderListener);
 	console.log('position is (' + position.x + ', ' + position.y + ')');
 
 })();
-*/
