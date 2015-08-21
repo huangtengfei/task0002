@@ -145,6 +145,67 @@ function getPosition(element) {
     }
 }
 
+// 实现一个简单的Query
+function $(selector) {
+	var sltArr = selector.split(/\s+/);
+	var curr = document;
+	sltArr.forEach(function(item, index){
+		var type = item.charAt(0);
+		switch (type) {
+			case '#':
+				curr = curr.getElementById(item.slice(1));
+				break;
+			case '.':
+				curr = curr.getElementsByClassName(item.slice(1))[0];
+				break;
+			case '[':
+				if(item.slice(-1) === ']') {
+					var slt = item.slice(1, -1);
+					var eles = curr.getElementsByTagName('*');
+					for(var i = 0; i < eles.length; i++){
+						if(slt.indexOf('=') != -1){
+							var arr = slt.split('=');
+							if(arr[1] == eles[i].getAttribute(arr[0])){
+								curr = eles[i];
+								break;
+							}
+						}else {
+							if(eles[i].getAttribute(slt)){
+								curr = eles[i];
+								break;
+							}
+						}
+					}				
+				}
+				// 如果遍历后i已经等于eles的长度，说明没有满足条件的dom元素
+				if(eles.length === i){
+					curr = [];
+				}
+				break;
+			default:
+				curr = curr.getElementsByTagName(item)[0];
+				break;	
+		}		
+	})
+	return curr;
+}
+
+(function testSelector(){
+	console.log('============test id selector =============');
+	console.log($('#parentNode'));
+	console.log('============test class selector =============');
+	console.log($('.biubiu'));
+	console.log('============test attribute selector =============');
+	console.log($('[src]'));
+	console.log($('[good]'));
+	console.log('============test attribute selector with value =============');
+	console.log($('[src=util.js]'));
+	console.log('============test tag selector =============');
+	console.log($('button'));
+	console.log('============test id and class selector =============');
+	console.log($('#grandNode .lalala'));
+})();
+
 (function testUtil(){
 	console.log('=========test isArray========');
 	console.log(isArray([1, 2]));
