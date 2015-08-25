@@ -37,3 +37,7 @@
 .task-sec p {
 	display: none;
 }
+
+.task-sec .error {
+	color: red;
+}
