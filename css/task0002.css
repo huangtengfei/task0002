@@ -1,0 +1,39 @@
+
+* {
+	padding: 0;
+}
+
+/*
+* task first
+*/
+
+.task-fir button {
+	width: 60px;
+	height: 30px;
+}
+
+.task-fir .too-more, .task-fir .too-less {
+	color: red;
+	display: none;
+}
+
+.task-fir ul li {
+	list-style-type: none;
+}
+
+/*
+* task second
+*/
+
+.task-sec input {
+	width: 200px;
+	height: 18px;
+}
+
+.task-sec button {
+	height: 20px;
+}
+
+.task-sec p {
+	display: none;
+}
