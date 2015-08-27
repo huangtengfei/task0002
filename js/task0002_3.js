@@ -1,43 +1,48 @@
 'use strict'
 
-var btn1 = $('#btn1'),
-	btn2 = $('#btn2'),
-	btn3 = $('#btn3'),
-	img1 = $('#img1'),
-	img2 = $('#img2'),
-	img3 = $('#img3');
+/*
+* 配置参数，如更改轮播图片数量，需对应修改imgs下面的url和btn数量
+*/
+var seq = true,		//表示轮播的顺序（正序true，逆序false，默认为正序）
+	loop = true,	//表示是否循环
+	interval = 1000,	//间隔时长
+	total = 3;	//轮播的图片数量
 
+
+var curr = 1;	//表示当前展示到了哪一张图片
+
+//手动点击某一张图片
+function select(number) {
+	curr = number;
+	show();
+}
+
+//轮播
+function lunbo() {
+
+	if(loop) {
+		curr = curr > total ? 1 : curr;
+	}
+	if(curr <= total){
+		show();
+		var t = setTimeout('lunbo()', interval);
+		curr++;
+	}
+}
 
 // 遍历，给前面的left递减图片宽度，后面的left递增图片宽度
-function select(number) {
-
-	// 改进2
-	var i = 3;
+function show() {
+	var i = total;
 	while(i > 0) {
 		$('#btn' + i).style.background = 'none';
-		$('#img' + i).style.left = 600 * (i - number) + 'px';
+		if(seq) {
+			$('#img' + i).style.left = 600 * (i - curr) + 'px';
+		}else {
+			$('#img' + i).style.left = 600 * (curr - i) + 'px';
+		}
 		i--;
 	}
-
-	$('#btn' + number).style.background = '#fff';
-
-	// // 改进1
-	// img1.style.left = 600*(1-number) + 'px';
-	// img2.style.left = 600*(2-number) + 'px';
-	// img3.style.left = 600*(3-number) + 'px';
-
-	// // 初始
-	// if(number == 1) {
-	// 	img1.style.left = '0';
-	// 	img2.style.left = '600px';
-	// 	img3.style.left = '1200px';
-	// }else if (number==2) {
-	// 	img1.style.left = '-600px';
-	// 	img2.style.left = '0'
-	// 	img3.style.left = '600px';
-	// }else if (number==3) {
-	// 	img1.style.left = '-1200px';
-	// 	img2.style.left = '-600px'
-	// 	img3.style.left = '0';
-	// };
+	$('#btn' + curr).style.background = '#fff';
 }
+
+lunbo();
