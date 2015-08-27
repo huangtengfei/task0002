@@ -6,7 +6,8 @@
 var seq = true,		//表示轮播的顺序（正序true，逆序false，默认为正序）
 	loop = true,	//表示是否循环
 	interval = 1000,	//间隔时长
-	total = 3;	//轮播的图片数量
+	total = 3,	//轮播的图片数量
+	width = 600;	//单张图片宽度
 
 
 var curr = 1;	//表示当前展示到了哪一张图片
@@ -19,14 +20,21 @@ function select(number) {
 
 //轮播
 function lunbo() {
-
 	if(loop) {
-		curr = curr > total ? 1 : curr;
+		if(seq) {
+			curr = curr > total ? 1 : curr;		//正序循环，超出则置curr为第一张图片
+		}else{
+			curr = curr < 1 ? total : curr;		//逆序循环，超出则置curr为最后一张图片
+		}
 	}
-	if(curr <= total){
+	if(curr >= 1 && curr <= total){
 		show();
 		var t = setTimeout('lunbo()', interval);
-		curr++;
+		if(seq) {
+			curr++;
+		}else {
+			curr--;
+		}
 	}
 }
 
@@ -35,14 +43,12 @@ function show() {
 	var i = total;
 	while(i > 0) {
 		$('#btn' + i).style.background = 'none';
-		if(seq) {
-			$('#img' + i).style.left = 600 * (i - curr) + 'px';
-		}else {
-			$('#img' + i).style.left = 600 * (curr - i) + 'px';
-		}
+		$('#img' + i).style.left = width * (i - curr) + 'px';
+		$('#img' + i).style.transition = 'width 2s';
 		i--;
 	}
 	$('#btn' + curr).style.background = '#fff';
 }
 
+//开始轮播
 lunbo();
