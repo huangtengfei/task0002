@@ -79,9 +79,15 @@ function trim(str) {
     return str.replace(/\s+/g, '');
 }
 
+// 判断字符串是否以特定字符开头
+String.prototype.startWith = function(str) {
+	var reg = new RegExp('^' + str);
+	return reg.test(this);
+}
+
 // 实现一个遍历数组的方法，针对数组中每一个元素执行fn函数，并将数组索引和元素作为参数传递
 function each(arr, fn) {
-    for (var i = 0; i < arr.length; i++) {
+    for (var i = 0; arr && i < arr.length; i++) {
     	fn(arr[i], i);
     };
 }

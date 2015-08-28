@@ -80,3 +80,41 @@
 #btn1, .task-third .circle-btn span:hover, .task-third .circle-btn span:focus {
 	background: #fff;
 }
+
+/*
+* task forth
+*/
+
+.task-forth {
+	text-align: center;
+}
+
+.task-forth input {
+	height: 26px;
+	width: 300px;
+}
+
+.task-forth .sug {
+	width: 302px;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: left;
+	border: 1px solid #ccc;
+	border-top: none;
+	display: none;
+}
+
+.task-forth .sug ul {
+	margin: 0;
+}
+
+.task-forth .sug li {
+	list-style-type: none;
+	line-height: 26px;
+	text-indent: 4px;
+}
+
+.task-forth .sug li:hover, .task-forth .sug li:focus {
+	cursor: pointer;
+	background: #f0f0f0;
+}
