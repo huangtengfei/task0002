@@ -8,6 +8,8 @@ var isDrag = false;
 var disX = 0,
 	disY = 0;
 
+var iLeft, iTop;
+
 // item1.onmouseover = function() {
 // 	var evt = arguments[0] || window.event;
 
@@ -25,6 +27,8 @@ item1.onmousedown = function() {
 	isDrag = true;
 	disX = evt.clientX - item1.offsetLeft;
 	disY = evt.clientY - item1.offsetTop;
+	console.log('clientX:(' + evt.clientX + ',' + evt.clientY + ')');
+	console.log('offsetLeft:(' + item1.offsetLeft + ',' + item1.offsetTop + ')');
 	return;
 }
 
@@ -36,15 +40,29 @@ item1.onmousemove = function() {
 
 	var evt = arguments[0] || window.event;
 
-	var iLeft = evt.clientX - disX;
-	var iTop = evt.clientY - disY;
+	iLeft = evt.clientX - disX;
+	iTop = evt.clientY - disY;
 
 	item1.style.left = iLeft + 'px';
 	item1.style.top = iTop + 'px';
+	
 	return;
 }
 
 item1.onmouseup = function() {
+
+	if (parseInt(iLeft) > 200) {
+		item1.style.left = '300px';
+	}else {
+		item1.style.left = iLeft + 'px';
+	}
+
+	if (parseInt(iTop) > -10) {
+		item1.style.top = '0px';
+	}else {
+		item1.style.top = iTop + 'px';
+	}
+
 	isDrag = false;
 }
 
