@@ -124,7 +124,7 @@
 */
 
 .task-fifth {
-	width: 600px;
+	width: 800px;
 	height: 600px;
 }
 
@@ -139,7 +139,8 @@
 }
 
 .task-fifth .right-con {
-	margin-left: 300px;
+	position: absolute;
+	margin-left: 400px;
 }
 
 .task-fifth .item {
