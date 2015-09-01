@@ -19,7 +19,7 @@ var isDrag = false;		// 是否可拖拽，只有 onmousedown 才可拖拽
 var disX = 0,
 	disY = 0; 	
 
-var iLeft, iTop；	// 移动过程中计算得到的相对于父容器的left和top
+var iLeft, iTop;	// 移动过程中计算得到的相对于父容器的left和top
 
 // 当前拖拽元素的原始 z-index
 // 鼠标按下时，给其设置一个较大的 z-index，避免鼠标划过其他元素时产生影响
